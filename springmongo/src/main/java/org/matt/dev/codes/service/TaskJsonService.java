@@ -3,7 +3,7 @@ package org.matt.dev.codes.service;
 import java.util.List;
 import java.util.UUID;
 
-import org.matt.dev.codes.kafka.KafkaProducer;
+import org.matt.dev.codes.kafka.KafkaJsonProducer;
 import org.matt.dev.codes.model.Task;
 import org.matt.dev.codes.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +13,20 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class TaskService {
+public class TaskJsonService {
 
     @Autowired
     private TaskRepository repository;
 
     @Autowired
-    private KafkaProducer kafkaProducer;
+    private KafkaJsonProducer kafkaJsonProducer;
 
-    private static final String TOPIC = "task_topic";
-
+    private static final String TOPIC = "task_json_topic";
     // Create
     public Task createTask(Task task) {
         task.setTaskId(UUID.randomUUID().toString().split("-")[0]);
         Task savedTask = repository.save(task);
-        kafkaProducer.sendMessage(TOPIC, "Created Task: %s".formatted(savedTask.getTaskId()));
+        kafkaJsonProducer.sendMessage(TOPIC, savedTask);
         log.info("Created Task with ID: {}", savedTask.getTaskId());
         return savedTask;
     }
@@ -73,7 +72,7 @@ public class TaskService {
         existingTask.setStoryPoint(taskRequest.getStoryPoint());
 
         Task updatedTask = repository.save(existingTask);
-        kafkaProducer.sendMessage(TOPIC, "Updated Task: %s".formatted(updatedTask.getTaskId()));
+        kafkaJsonProducer.sendMessage(TOPIC, updatedTask);
         log.info("Updated Task with ID: {}", updatedTask.getTaskId());
         return updatedTask;
     }
@@ -81,7 +80,7 @@ public class TaskService {
     // Delete
     public String deleteTask(String taskId) {
         repository.deleteById(taskId);
-        kafkaProducer.sendMessage(TOPIC, "Deleted Task: %s".formatted(taskId));
+        kafkaJsonProducer.sendMessage(TOPIC, new Task(taskId, null, null, null, null));
         log.info("Deleted Task with ID: {}", taskId);
         return "Task ID: %s ,Deleted successfully".formatted(taskId);
     }
