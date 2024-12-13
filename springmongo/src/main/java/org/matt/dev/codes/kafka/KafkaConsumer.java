@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 public class KafkaConsumer {
 
     @KafkaListener(topics = "task_topic", groupId = "group_id")
-    public void consume(String message) {
+    public void consume(String message, Acknowledgment acknowledgment){
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         log.info("Consumed message at {}: {}", timestamp, message);
+        
+        acknowledgment.acknowledge();
     }
 }

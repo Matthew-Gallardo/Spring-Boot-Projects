@@ -1,10 +1,10 @@
 package org.matt.dev.codes.controller;
 
-
 import java.util.List;
 
 import org.matt.dev.codes.model.Task;
 import org.matt.dev.codes.service.TaskJsonService;
+import org.matt.dev.codes.validators.TaskValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,45 +18,47 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/tasks/v2")
 public class TaskJsonController {
-	
-	@Autowired
-	private TaskJsonService service;
-	
-	@PostMapping
-	public Task createTask(@RequestBody Task task) {
-		return service.createTask(task);
-	}
-	
-	@GetMapping("/all")
-	public List<Task> getTasks(){
-		return service.getAllTask();
-	}
-	
-	@GetMapping("/{taskId}")
-	public Task getTask(@PathVariable String taskId) {
-		return service.getTaskById(taskId);
-	}
-	
-	@GetMapping("/severity/{severity}")
-	public List<Task> findTasksBySeverity(@PathVariable Integer severity){
-		return service.getTaskBySeverity(severity);
-	}
-	
-	@GetMapping("/assignee/{assignee}")
-	public List<Task> findTasksByAssignee(@PathVariable String assignee){
-		return service.getTaskByAssignee(assignee);
-	}
-	
-	@PutMapping
-	public Task updateTask(@RequestBody Task task) {
-		return service.updateTask(task);
-	}
-	
-	@DeleteMapping("/{taskId}")
-	public String deleteTask(@PathVariable String taskId) {
-		return service.deleteTask(taskId);
-	}
-	
-	
 
+    @Autowired
+    private TaskJsonService service;
+
+    @Autowired
+    private TaskValidator taskValidator;
+
+    @PostMapping
+    public Task createTask(@RequestBody Task task) {
+        taskValidator.validate(task);
+        return service.createTask(task);
+    }
+
+    @GetMapping("/all")
+    public List<Task> getTasks() {
+        return service.getAllTask();
+    }
+
+    @GetMapping("/{taskId}")
+    public Task getTask(@PathVariable String taskId) {
+        return service.getTaskById(taskId);
+    }
+
+    @GetMapping("/severity/{severity}")
+    public List<Task> findTasksBySeverity(@PathVariable Integer severity) {
+        return service.getTaskBySeverity(severity);
+    }
+
+    @GetMapping("/assignee/{assignee}")
+    public List<Task> findTasksByAssignee(@PathVariable String assignee) {
+        return service.getTaskByAssignee(assignee);
+    }
+
+    @PutMapping
+    public Task updateTask(@RequestBody Task task) {
+        taskValidator.validate(task);
+        return service.updateTask(task);
+    }
+
+    @DeleteMapping("/{taskId}")
+    public String deleteTask(@PathVariable String taskId) {
+        return service.deleteTask(taskId);
+    }
 }
