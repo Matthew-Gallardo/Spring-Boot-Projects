@@ -1,7 +1,4 @@
-package org.matt.dev.codes.entity;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+package org.matt.dev.codes.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "User")
-public class User {
+public class UserDTO {
 	
-	@Id
 	private String id;
 	private String firstName;
 	private String lastName;
