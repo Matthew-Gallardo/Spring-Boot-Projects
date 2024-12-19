@@ -28,7 +28,11 @@ public class UserService {
         return repository.findAll()
                 .map(AppUtils::entityToDto)
                 .doOnComplete(() -> log.info("Fetched all users successfully"))
-                .doOnError(e -> log.error("Error fetching all users", e));
+                .doOnError(e -> log.error("Error fetching all users", e))
+                .doOnNext(user -> log.info("Fetched user: {}", user))
+                .doOnTerminate(() -> repository.findAll().count()
+                    .doOnNext(count -> log.info("Total number of users fetched: {}", count))
+                    .subscribe());
     }
 
     public Mono<UserDTO> getUser(String id) {
