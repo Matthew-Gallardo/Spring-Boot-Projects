@@ -1,0 +1,75 @@
+type Query { 
+    getEligibleAndNonBlacklistedAccounts(bbn: String!, accountType: String!): [CasaAccount]
+    getAllAccounts: [CasaAccount]
+}
+
+type Mutation {
+    deleteCasaAccountByBbnAndAccountNumber(input: DeleteCasaAccountInput): Void
+    updateCasaAccount(input: UpdateCasaAccountInput): CasaAccount
+}
+
+input DeleteCasaAccountInput {
+    bbn: String!
+    accountNumber: String!
+}
+
+input UpdateCasaAccountInput {
+    customerBetterBankingNumber: String!
+    accountNumber: String!
+    accountName: String
+    productName: String
+    productTypeCode: String
+    accountNickName: String
+    accountTypeCode: String
+    accountTypeDescription: String
+    currentBalance: BigDecimal
+    availableBalance: BigDecimal
+    currency: String
+    openingDate: String
+    branchName: String
+    ownershipType: String
+    swiftCode: String
+    eligibilityFlag: Int
+    accountStatus: String
+    isHidden: Boolean
+    blacklistFlag: Int
+}
+
+type CasaAccount {
+    customerBetterBankingNumber: String!
+    accountNumber: String
+    accountName: String
+    productName: String
+    productTypeCode: String
+    accountNickName: String
+    accountTypeCode: String
+    accountTypeDescription: String
+    currentBalance: BigDecimal
+    availableBalance: BigDecimal
+    currency: String
+    openingDate: String
+    branchName: String
+    ownershipType: String
+    swiftCode: String
+    eligibilityFlag: Int
+    accountStatus: String
+    specialConditionDetails: [SpecialConditionDetail]
+    productDisplay: ProductDisplay
+    isHidden: Boolean
+    blacklistFlag: Int
+}
+
+type SpecialConditionDetail {
+    specialConditionCode: String
+    specialConditionDescription: String
+}
+
+type ProductDisplay {
+    productImage: String
+    containerBackgroundColor: String
+    containerBorderColor: String
+    quickActionBackgroundColor: String
+}
+
+scalar BigDecimal
+scalar Void
