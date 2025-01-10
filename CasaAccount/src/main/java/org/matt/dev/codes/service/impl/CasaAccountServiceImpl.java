@@ -10,10 +10,19 @@ import org.matt.dev.codes.model.CasaAccount;
 import org.matt.dev.codes.model.ProductDisplay;
 import org.matt.dev.codes.model.SpecialConditionDetail;
 import org.matt.dev.codes.service.CasaAccountService;
+import org.springframework.objenesis.instantiator.basic.NewInstanceInstantiator;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CasaAccountServiceImpl implements CasaAccountService {
+	
+	private List<SpecialConditionDetail> specialConditionDetails = new ArrayList<>(Arrays.asList(
+			new SpecialConditionDetail("SC1", "Description SC1"),
+			new SpecialConditionDetail("SC2", "Description SC2"),
+			new SpecialConditionDetail("SC3", "Description SC3")
+			
+			));
+		
 
     private List<CasaAccount> accounts = new ArrayList<>(Arrays.asList(
         new CasaAccount("123", "1", "Account 1", "Product 1", "PTC1", "Nick 1", "ATC1", "Description 1", new BigDecimal("1000.00"), new BigDecimal("800.00"), "PHP", "2021-01-01", "Branch 1", "Ownership 1", "SWIFT1", 1, "Active", 
@@ -35,7 +44,7 @@ public class CasaAccountServiceImpl implements CasaAccountService {
             .filter(account -> account.getEligibilityFlag() == 1 && account.getBlacklistFlag() == 0)
             .collect(Collectors.toList());
     }
-
+    
     @Override
     public List<CasaAccount> findAllAccounts() {
         return new ArrayList<>(accounts);
@@ -60,4 +69,17 @@ public class CasaAccountServiceImpl implements CasaAccountService {
         }
         return null;
     }
+
+	@Override
+	public CasaAccount findAccountByBbnAccount(String bbn) {
+		 return accounts.stream()
+	                .filter(account -> account.getCustomerBetterBankingNumber().equals(bbn))
+	                .findFirst()
+	                .orElse(null);
+	}
+	
+	@Override
+	public List<SpecialConditionDetail> findAllSpecialConditionDetails() {
+		return new ArrayList<>(specialConditionDetails);
+	}
 }
