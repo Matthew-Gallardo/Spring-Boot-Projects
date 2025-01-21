@@ -27,6 +27,8 @@ public class CasaAccountServiceImpl implements CasaAccountService {
         return casaAccountRepository.findAll();
     }
 
+
+
     @Override
     public Mono<Void> deleteCasaAccountByBbnAndAccountNumber(String bbn, String accountNumber) {
         return casaAccountRepository.findByCustomerBetterBankingNumberAndAccountNumber(bbn, accountNumber)
@@ -43,5 +45,11 @@ public class CasaAccountServiceImpl implements CasaAccountService {
     @Override
     public Mono<CasaAccount> createCasaAccount(CasaAccount account) {
         return casaAccountRepository.save(account);
+    }
+
+
+    @Override
+    public Mono<CasaAccount> findAccountByBbn(String bbn) {
+        return casaAccountRepository.findById(bbn);
     }
 }

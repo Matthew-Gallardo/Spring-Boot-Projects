@@ -1,7 +1,10 @@
 type Query { 
     getEligibleAndNonBlacklistedAccounts(bbn: String!, accountType: String!): [CasaAccount]
     getAllAccounts: [CasaAccount]
+    getAccountByBbn(bbn:String!): CasaAccount
+
 }
+
 
 type Mutation {
 	createCasaAccount(input: CreateCasaAccountInput) : CasaAccount

@@ -10,4 +10,5 @@ public interface CasaAccountService {
     Flux<CasaAccount> findAllAccounts();
     Mono<CasaAccount> updateCasaAccount(CasaAccount account);
     Mono<CasaAccount> createCasaAccount(CasaAccount account);
+    Mono<CasaAccount> findAccountByBbn(String bbn);
 }

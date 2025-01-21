@@ -5,6 +5,7 @@ import org.matt.dev.codes.model.dto.CasaAccountInput;
 import org.matt.dev.codes.model.dto.CreateCasaAccountInput;
 import org.matt.dev.codes.model.dto.UpdateCasaAccountInput;
 import org.matt.dev.codes.service.CasaAccountService;
+import org.matt.dev.codes.validators.CasaAccountValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -19,10 +20,18 @@ public class CasaAccountDataFetcher {
     @Autowired
     private CasaAccountService casaAccountService;
 
+    @Autowired
+    private CasaAccountValidator casaAccountValidator;
+
     @QueryMapping
     public Flux<CasaAccount> getEligibleAndNonBlacklistedAccounts(@Argument String bbn,
                                                                   @Argument String accountType) {
         return casaAccountService.findEligibleAndNonBlacklistedAccounts(bbn, accountType);
+    }
+
+    @QueryMapping
+    public Mono<CasaAccount> getAccountByBbn(@Argument String bbn){
+        return  casaAccountService.findAccountByBbn(bbn);
     }
 
     @QueryMapping
@@ -60,6 +69,7 @@ public class CasaAccountDataFetcher {
             input.getIsHidden(),
             input.getBlacklistFlag()
         );
+        casaAccountValidator.validate(updatedAccount);
         return casaAccountService.updateCasaAccount(updatedAccount);
     }
 
@@ -88,6 +98,7 @@ public class CasaAccountDataFetcher {
             input.getIsHidden(),
             input.getBlacklistFlag()
         );
+        casaAccountValidator.validate(newAccount);
         return casaAccountService.createCasaAccount(newAccount);
     }
 }

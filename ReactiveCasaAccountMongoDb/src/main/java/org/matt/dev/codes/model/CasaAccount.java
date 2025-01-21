@@ -29,12 +29,12 @@ public class CasaAccount {
     private String branchName;
     private String ownershipType;
     private String swiftCode;
-    private int eligibilityFlag;
+    private Integer eligibilityFlag;
     private String accountStatus;
     private List<SpecialConditionDetail> specialConditionDetails;
     private ProductDisplay productDisplay;
     private boolean isHidden;
-    private int blacklistFlag;
+    private Integer blacklistFlag;
 
 
 }

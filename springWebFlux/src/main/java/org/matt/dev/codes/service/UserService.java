@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class UserService {
@@ -25,6 +27,8 @@ public class UserService {
 
     public Flux<UserDTO> getAllUser() {
         log.info("Fetching all users");
+
+
         return repository.findAll()
                 .map(AppUtils::entityToDto)
                 .doOnComplete(() -> log.info("Fetched all users successfully"))
@@ -32,6 +36,7 @@ public class UserService {
                 .doOnTerminate(() -> repository.findAll().count()
                     .doOnNext(count -> log.info("Total number of users fetched: {}", count))
                     .subscribe());
+
     }
 
     public Mono<UserDTO> getUser(String id) {
@@ -44,6 +49,7 @@ public class UserService {
 
     public Mono<UserDTO> createUser(Mono<UserDTO> userDtoMono) {
         log.info("Creating new user");
+
         return userDtoMono
                 .map(AppUtils::dtoToEntity)
                 .flatMap(repository::insert)

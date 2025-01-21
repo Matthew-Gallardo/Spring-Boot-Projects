@@ -76,4 +76,5 @@ public class UserController {
                                           .collect(Collectors.toList());
         return createUsersBulk(userDtos);
     }
+
 }
